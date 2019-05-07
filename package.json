@@ -7,7 +7,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "cross-env CI=true npm test"
+      "pre-push": "npm run test:ci"
     }
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
-    "eject": "react-scripts eject"
+    "test:ci": "cross-env CI=true npm test"
   },
   "eslintConfig": {
     "extends": "react-app"

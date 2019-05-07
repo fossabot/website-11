@@ -1,0 +1,102 @@
+Resources:
+  WebsiteCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - ${self:custom.domain.${self:custom.stage}}
+          - www.${self:custom.domain.${self:custom.stage}}
+        Origins:
+          - DomainName: ${self:custom.domain.${self:custom.stage}}.s3.amazonaws.com
+            Id: WebsiteFilesBucket
+            S3OriginConfig:
+              OriginAccessIdentity: { "Fn::Join" : ["", ["origin-access-identity/cloudfront/", { Ref: WebsiteOriginAccessIdentity } ] ]  }
+          - DomainName: { 'Fn::ImportValue': 'next-${self:custom.stage}-ApiGatewayRestApi-url' }
+            Id: ApiGatewayApi
+            OriginPath: /${self:custom.stage}
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        Enabled: 'true'
+        DefaultRootObject: index.html
+        PriceClass: 'PriceClass_100'
+        HttpVersion: 'http2'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: WebsiteFilesBucket
+          DefaultTTL: 86400
+          MaxTTL: 31536000
+          MinTTL: 0
+          ForwardedValues:
+            QueryString: 'true'
+            Cookies:
+              Forward: all
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+          AcmCertificateArn: ${self:custom.acmArn.${self:custom.stage}}
+          SslSupportMethod: 'sni-only'
+          MinimumProtocolVersion: TLSv1.1_2016
+        Logging:
+          Bucket:
+            Fn::GetAtt:
+              - CloudfrontLogsBucket
+              - DomainName
+        CacheBehaviors:
+          - AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - PATCH
+              - POST
+              - DELETE
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            Compress: 'true'
+            DefaultTTL: 10
+            MaxTTL: 10
+            MinTTL: 0
+            ForwardedValues:
+              QueryString: 'true'
+              Cookies:
+                Forward: all
+              Headers:
+                - Authorization
+                - Accept
+            PathPattern: "/api/*"
+            TargetOriginId: ApiGatewayApi
+            ViewerProtocolPolicy: redirect-to-https
+          - AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - PATCH
+              - POST
+              - DELETE
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            Compress: 'true'
+            DefaultTTL: 10
+            MaxTTL: 10
+            MinTTL: 0
+            ForwardedValues:
+              QueryString: 'true'
+              Cookies:
+                Forward: all
+              Headers:
+                - Authorization
+                - Accept
+            PathPattern: "/api/"
+            TargetOriginId: ApiGatewayApi
+            ViewerProtocolPolicy: redirect-to-https
+
+Outputs:
+  WebsiteCloudFrontDistributionDomainName:
+    Value:
+      'Fn::GetAtt': [WebsiteCloudFrontDistribution, DomainName]

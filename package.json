@@ -1,0 +1,51 @@
+{
+  "name": "@atlauncher/atlauncher.com",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Ryan Dowling <ryan.dowling@atlauncher.com>",
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "cross-env CI=true npm test"
+    }
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.5.2",
+    "@commitlint/config-conventional": "^7.5.0",
+    "cross-env": "^5.2.0",
+    "husky": "^1.3.1",
+    "serverless": "^1.41.0",
+    "serverless-s3-sync": "^1.8.0"
+  },
+  "scripts": {
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "info:dev": "serverless info --stage dev",
+    "info:prod": "serverless info --stage prod",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --passWithNoTests",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

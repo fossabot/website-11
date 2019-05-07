@@ -1,0 +1,36 @@
+Resources:
+  RootIPV4DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: ${self:custom.domain.${self:custom.stage}}.
+      Name: ${self:custom.domain.${self:custom.stage}}.
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName:
+          Fn::GetAtt:
+            - WebsiteCloudFrontDistribution
+            - DomainName
+
+  RootIPV6DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: ${self:custom.domain.${self:custom.stage}}.
+      Name: ${self:custom.domain.${self:custom.stage}}.
+      Type: AAAA
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName:
+          Fn::GetAtt:
+            - WebsiteCloudFrontDistribution
+            - DomainName
+
+  WWWCnameDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: ${self:custom.domain.${self:custom.stage}}.
+      Name: www.${self:custom.domain.${self:custom.stage}}.
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - "Ref": RootIPV4DNSRecord

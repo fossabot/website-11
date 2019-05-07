@@ -1,0 +1,45 @@
+service: atlauncher-com
+
+plugins:
+  - serverless-s3-sync
+
+package:
+  exclude:
+    - ./.github
+    - ./node_modules
+    - ./build
+    - ./src
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domain:
+    dev: atlauncher.dev
+    prod: atlauncher.com
+  acmArn:
+    dev: ${env:ACM_ARN_DEV, file(./secrets.yml):acmArn.dev}
+    prod: ${env:ACM_ARN_PROD, file(./secrets.yml):acmArn.prod}
+  s3Sync:
+    - bucketName: ${self:custom.domain.${self:custom.stage}}
+      localDir: build/
+      params:
+        - index.html:
+            CacheControl: 'no-cache'
+        - service-worker.js:
+            CacheControl: 'no-cache'
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-west-2
+
+# Create our resources with separate CloudFormation templates
+resources:
+  # Origin access identity
+  - ${file(resources/origin-access-identity.yml)}
+  # S3 buckets
+  - ${file(resources/s3-buckets.yml)}
+  # Cloudfront distribution
+  - ${file(resources/cloudfront-distribution.yml)}
+  # DNS Records
+  - ${file(resources/dns-records.yml)}

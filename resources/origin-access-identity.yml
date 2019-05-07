@@ -1,0 +1,6 @@
+Resources:
+  WebsiteOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "CloudFrontOriginAccessIdentity for ${self:service}-${self:provider.stage}"

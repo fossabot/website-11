@@ -1,0 +1,2 @@
+before_deploy:
+  - npm run build

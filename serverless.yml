@@ -29,7 +29,7 @@ custom:
   tags:
     project: backend
     service: ${self:service}
-    repo: https://github.com/ATLauncher/backend
+    repo: https://github.com/ATLauncher/website
 
 provider:
   name: aws

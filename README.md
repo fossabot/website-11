@@ -1,10 +1,10 @@
-# atlauncher.com
+# website
 
 Repository for atlauncher.com website
 
 ## Overview
 
-This project aims to contain all the code necessary for the frontend websites for ATLauncher next.
+This project aims to contain all the code necessary for the frontend websites for ATLauncher.
 
 ## Setup
 

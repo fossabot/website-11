@@ -26,12 +26,21 @@ custom:
             CacheControl: 'no-cache'
         - service-worker.js:
             CacheControl: 'no-cache'
+  tags:
+    project: backend
+    service: ${self:service}
+    repo: https://github.com/ATLauncher/backend
 
 provider:
   name: aws
   runtime: nodejs8.10
   stage: dev
   region: us-west-2
+  deploymentBucket:
+    tags:
+      ${self:custom.tags}
+  stackTags:
+    ${self:custom.tags}
 
 # Create our resources with separate CloudFormation templates
 resources:

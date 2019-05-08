@@ -11,8 +11,8 @@ Resources:
             Id: WebsiteFilesBucket
             S3OriginConfig:
               OriginAccessIdentity: { "Fn::Join" : ["", ["origin-access-identity/cloudfront/", { Ref: WebsiteOriginAccessIdentity } ] ]  }
-          - DomainName: { 'Fn::ImportValue': 'next-${self:custom.stage}-ApiGatewayRestApi-url' }
-            Id: ApiGatewayApi
+          - DomainName: { 'Fn::ImportValue': 'packs-service-${self:custom.stage}-ApiUrl' }
+            Id: PacksServiceApiGatewayApi
             OriginPath: /${self:custom.stage}
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
@@ -66,34 +66,8 @@ Resources:
               Headers:
                 - Authorization
                 - Accept
-            PathPattern: "/api/*"
-            TargetOriginId: ApiGatewayApi
-            ViewerProtocolPolicy: redirect-to-https
-          - AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-              - PUT
-              - PATCH
-              - POST
-              - DELETE
-            CachedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-            Compress: 'true'
-            DefaultTTL: 10
-            MaxTTL: 10
-            MinTTL: 0
-            ForwardedValues:
-              QueryString: 'true'
-              Cookies:
-                Forward: all
-              Headers:
-                - Authorization
-                - Accept
-            PathPattern: "/api/"
-            TargetOriginId: ApiGatewayApi
+            PathPattern: "/api/packs/?*"
+            TargetOriginId: PacksServiceApiGatewayApi
             ViewerProtocolPolicy: redirect-to-https
 
 Outputs:

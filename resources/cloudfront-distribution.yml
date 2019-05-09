@@ -11,11 +11,6 @@ Resources:
             Id: WebsiteFilesBucket
             S3OriginConfig:
               OriginAccessIdentity: { "Fn::Join" : ["", ["origin-access-identity/cloudfront/", { Ref: WebsiteOriginAccessIdentity } ] ]  }
-          - DomainName: { 'Fn::ImportValue': 'packs-service-${self:custom.stage}-ApiUrl' }
-            Id: PacksServiceApiGatewayApi
-            OriginPath: /${self:custom.stage}
-            CustomOriginConfig:
-              OriginProtocolPolicy: https-only
         Enabled: 'true'
         DefaultRootObject: index.html
         PriceClass: 'PriceClass_100'
@@ -42,33 +37,6 @@ Resources:
             Fn::GetAtt:
               - CloudfrontLogsBucket
               - DomainName
-        CacheBehaviors:
-          - AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-              - PUT
-              - PATCH
-              - POST
-              - DELETE
-            CachedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-            Compress: 'true'
-            DefaultTTL: 10
-            MaxTTL: 10
-            MinTTL: 0
-            ForwardedValues:
-              QueryString: 'true'
-              Cookies:
-                Forward: all
-              Headers:
-                - Authorization
-                - Accept
-            PathPattern: "/api/packs*"
-            TargetOriginId: PacksServiceApiGatewayApi
-            ViewerProtocolPolicy: redirect-to-https
 
 Outputs:
   WebsiteCloudFrontDistributionDomainName:

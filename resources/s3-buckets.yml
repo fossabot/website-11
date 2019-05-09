@@ -2,7 +2,7 @@ Resources:
   WebsiteFilesBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: ${self:custom.domain.${self:custom.stage}}
+      BucketName: atlauncher-website-${self:custom.stage}
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html

@@ -7,7 +7,7 @@ Resources:
           - ${self:custom.domain.${self:custom.stage}}
           - www.${self:custom.domain.${self:custom.stage}}
         Origins:
-          - DomainName: ${self:custom.domain.${self:custom.stage}}.s3.amazonaws.com
+          - DomainName: atlauncher-website-${self:custom.stage}.s3.amazonaws.com
             Id: WebsiteFilesBucket
             S3OriginConfig:
               OriginAccessIdentity: { "Fn::Join" : ["", ["origin-access-identity/cloudfront/", { Ref: WebsiteOriginAccessIdentity } ] ]  }

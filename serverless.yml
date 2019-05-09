@@ -19,7 +19,7 @@ custom:
     dev: ${env:ACM_ARN_DEV, file(./secrets.yml):acmArn.dev}
     prod: ${env:ACM_ARN_PROD, file(./secrets.yml):acmArn.prod}
   s3Sync:
-    - bucketName: ${self:custom.domain.${self:custom.stage}}
+    - bucketName: atlauncher-website-${self:custom.stage}
       localDir: build/
       params:
         - index.html:

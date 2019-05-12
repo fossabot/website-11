@@ -7,6 +7,7 @@ import { loadCurrentAuth } from './actions/auth';
 import Home from './views/Home/Home';
 import Login from './views/Login/Login';
 import Logout from './views/Logout/Logout';
+import Settings from './views/Settings/Settings';
 
 const App = ({ dispatch, loggedIn }) => {
     useEffect(() => {
@@ -31,12 +32,18 @@ const App = ({ dispatch, loggedIn }) => {
                                 <Link to="/logout">Logout</Link>
                             </li>
                         )}
+                        {loggedIn && (
+                            <li>
+                                <Link to="/settings">Settings</Link>
+                            </li>
+                        )}
                     </ul>
                 </nav>
 
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/logout" exact component={Logout} />
+                <Route path="/settings" exact component={Settings} />
             </div>
         </Router>
     );

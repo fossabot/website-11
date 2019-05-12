@@ -7,6 +7,12 @@ const defaultState = {
     loggingIn: false,
     error: null,
     loading: false,
+    mfa: {
+        enabled: false,
+        loading: false,
+        confirming: false,
+        secret: null,
+    },
 };
 
 export default (state = defaultState, action) => {
@@ -45,6 +51,56 @@ export default (state = defaultState, action) => {
         case actions.LOGOUT_REQUEST:
         case actions.LOGOUT_SUCCESS:
             return defaultState;
+        case actions.SETUP_MFA_REQUEST:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    loading: true,
+                },
+            };
+        case actions.SETUP_MFA_GOT_SECRET:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    loading: false,
+                    secret: action.secretCode,
+                },
+            };
+        case actions.SETUP_MFA_ERROR:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    loading: false,
+                },
+            };
+        case actions.CONFIRM_MFA_REQUEST:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    confirming: true,
+                },
+            };
+        case actions.CONFIRM_MFA_SUCCESS:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    confirming: false,
+                    enabled: true,
+                },
+            };
+        case actions.CONFIRM_MFA_ERROR:
+            return {
+                ...state,
+                mfa: {
+                    ...state.mfa,
+                    confirming: false,
+                },
+            };
         default:
             return state;
     }

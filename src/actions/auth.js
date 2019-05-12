@@ -2,10 +2,56 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 import config from '../config';
 
-export const LOGIN = 'LOGIN';
+export const LOAD_CURRENT_AUTH_REQUEST = 'LOAD_CURRENT_AUTH_REQUEST';
+export const LOAD_CURRENT_AUTH_SUCCESS = 'LOAD_CURRENT_AUTH_SUCCESS';
+export const LOAD_CURRENT_AUTH_ERROR = 'LOAD_CURRENT_AUTH_ERROR';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+export const loadCurrentAuth = () => {
+    return dispatch => {
+        dispatch({ type: LOAD_CURRENT_AUTH_REQUEST });
+
+        const cognitoPool = new AmazonCognitoIdentity.CognitoUserPool({
+            UserPoolId: config.auth.userPoolId,
+            ClientId: config.auth.userPoolWebClientId,
+        });
+
+        const cognitoUser = cognitoPool.getCurrentUser();
+
+        cognitoUser.getSession((err, session) => {
+            if (err) {
+                dispatch({ type: LOAD_CURRENT_AUTH_ERROR });
+                return;
+            }
+
+            if (!session.isValid()) {
+                dispatch({ type: LOAD_CURRENT_AUTH_ERROR });
+                return;
+            }
+
+            const idToken = session.getIdToken().getJwtToken();
+            const refreshToken = session.getRefreshToken().getToken();
+            const expiration = session.getIdToken().getExpiration();
+            const { email, sub: id, email_verified: emailVerified } = session.getIdToken().payload;
+
+            const attributes = {
+                id,
+                email,
+                emailVerified,
+            };
+
+            const tokens = {
+                id: idToken,
+                refresh: refreshToken,
+                expiration: expiration,
+            };
+
+            dispatch({ type: LOAD_CURRENT_AUTH_SUCCESS, attributes, tokens });
+        });
+    };
+};
 
 export const login = ({ email, password, rememberMe = false }) => {
     return dispatch => {
@@ -26,6 +72,7 @@ export const login = ({ email, password, rememberMe = false }) => {
 
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
+                cognitoUser.cacheTokens();
                 const idToken = result.getIdToken().getJwtToken();
                 const refreshToken = result.getRefreshToken().getToken();
                 const expiration = result.getIdToken().getExpiration();
@@ -56,3 +103,4 @@ export const login = ({ email, password, rememberMe = false }) => {
         });
     };
 };
+

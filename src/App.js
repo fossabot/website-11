@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+import { loadCurrentAuth } from './actions/auth';
+
 import Home from './views/Home/Home';
 import Login from './views/Login/Login';
+import Logout from './views/Logout/Logout';
 
-const App = ({ loggedIn }) => {
+const App = ({ dispatch, loggedIn }) => {
+    useEffect(() => {
+        dispatch(loadCurrentAuth());
+    }, [dispatch]);
+
     return (
         <Router>
             <div>

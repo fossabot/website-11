@@ -2,23 +2,30 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 import config from '../config';
 
+const cognitoPool = new AmazonCognitoIdentity.CognitoUserPool({
+    UserPoolId: config.auth.userPoolId,
+    ClientId: config.auth.userPoolWebClientId,
+});
+
 export const LOAD_CURRENT_AUTH_REQUEST = 'LOAD_CURRENT_AUTH_REQUEST';
 export const LOAD_CURRENT_AUTH_SUCCESS = 'LOAD_CURRENT_AUTH_SUCCESS';
 export const LOAD_CURRENT_AUTH_ERROR = 'LOAD_CURRENT_AUTH_ERROR';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 export const loadCurrentAuth = () => {
     return dispatch => {
         dispatch({ type: LOAD_CURRENT_AUTH_REQUEST });
 
-        const cognitoPool = new AmazonCognitoIdentity.CognitoUserPool({
-            UserPoolId: config.auth.userPoolId,
-            ClientId: config.auth.userPoolWebClientId,
-        });
-
         const cognitoUser = cognitoPool.getCurrentUser();
+
+        if (!cognitoUser) {
+            dispatch({ type: LOAD_CURRENT_AUTH_ERROR });
+            return;
+        }
 
         cognitoUser.getSession((err, session) => {
             if (err) {
@@ -33,7 +40,6 @@ export const loadCurrentAuth = () => {
 
             const idToken = session.getIdToken().getJwtToken();
             const refreshToken = session.getRefreshToken().getToken();
-            const expiration = session.getIdToken().getExpiration();
             const { email, sub: id, email_verified: emailVerified } = session.getIdToken().payload;
 
             const attributes = {
@@ -45,7 +51,6 @@ export const loadCurrentAuth = () => {
             const tokens = {
                 id: idToken,
                 refresh: refreshToken,
-                expiration: expiration,
             };
 
             dispatch({ type: LOAD_CURRENT_AUTH_SUCCESS, attributes, tokens });
@@ -64,18 +69,13 @@ export const login = ({ email, password, rememberMe = false }) => {
 
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: email,
-            Pool: new AmazonCognitoIdentity.CognitoUserPool({
-                UserPoolId: config.auth.userPoolId,
-                ClientId: config.auth.userPoolWebClientId,
-            }),
+            Pool: cognitoPool,
         });
 
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                cognitoUser.cacheTokens();
                 const idToken = result.getIdToken().getJwtToken();
                 const refreshToken = result.getRefreshToken().getToken();
-                const expiration = result.getIdToken().getExpiration();
                 const {
                     email,
                     sub: id,
@@ -91,7 +91,6 @@ export const login = ({ email, password, rememberMe = false }) => {
                 const tokens = {
                     id: idToken,
                     refresh: refreshToken,
-                    expiration: expiration,
                 };
 
                 dispatch({ type: LOGIN_SUCCESS, tokens, attributes });
@@ -104,3 +103,16 @@ export const login = ({ email, password, rememberMe = false }) => {
     };
 };
 
+export const logout = () => {
+    return dispatch => {
+        dispatch({ type: LOGOUT_REQUEST });
+
+        const cognitoUser = cognitoPool.getCurrentUser();
+
+        if (cognitoUser !== null) {
+            cognitoUser.signOut();
+        }
+
+        dispatch({ type: LOGOUT_SUCCESS });
+    };
+};

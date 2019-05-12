@@ -26,11 +26,17 @@ const App = ({ dispatch, loggedIn }) => {
                                 <Link to="/login">Login</Link>
                             </li>
                         )}
+                        {loggedIn && (
+                            <li>
+                                <Link to="/logout">Logout</Link>
+                            </li>
+                        )}
                     </ul>
                 </nav>
 
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
+                <Route path="/logout" exact component={Logout} />
             </div>
         </Router>
     );

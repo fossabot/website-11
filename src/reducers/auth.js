@@ -44,7 +44,6 @@ export default (state = defaultState, action) => {
             };
         case actions.LOGOUT_REQUEST:
         case actions.LOGOUT_SUCCESS:
-        case actions.LOGOUT_ERROR:
             return defaultState;
         default:
             return state;

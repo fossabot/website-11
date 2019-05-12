@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import React, { useState } from 'react';
-import { Button, Checkbox, Form, Message } from 'semantic-ui-react';
+import { Button, Form, Message } from 'semantic-ui-react';
 
 import { login } from '../../../actions/auth';
 
 const Login = ({ dispatch, error }) => {
-    const [fields, updateFields] = useState({ email: '', password: '', rememberMe: false });
+    const [fields, updateFields] = useState({ email: '', password: '' });
 
     const handleSubmit = () => {
         dispatch(login(fields));
@@ -18,16 +18,9 @@ const Login = ({ dispatch, error }) => {
         });
     };
 
-    const handleCheckboxChange = () => {
-        updateFields({
-            ...fields,
-            rememberMe: !fields.rememberMe,
-        });
-    };
-
     return (
         <>
-            <Form onSubmit={handleSubmit} error={error}>
+            <Form onSubmit={handleSubmit} error={!!error}>
                 {error && (
                     <Message error={true}>
                         <Message.Header>Something wen't wrong!</Message.Header>
@@ -52,14 +45,6 @@ const Login = ({ dispatch, error }) => {
                         value={fields.password}
                         placeholder="Password"
                         onChange={handleChange}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox
-                        name="rememberMe"
-                        label="Remember me"
-                        onChange={handleCheckboxChange}
-                        checked={fields.rememberMe}
                     />
                 </Form.Field>
                 <Button type="submit">Submit</Button>

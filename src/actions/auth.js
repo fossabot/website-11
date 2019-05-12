@@ -58,9 +58,9 @@ export const loadCurrentAuth = () => {
     };
 };
 
-export const login = ({ email, password, rememberMe = false }) => {
+export const login = ({ email, password }) => {
     return dispatch => {
-        dispatch({ type: LOGIN_REQUEST, email, password, rememberMe });
+        dispatch({ type: LOGIN_REQUEST, email, password });
 
         const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
             Username: email,

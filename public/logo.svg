@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Lager_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 312 362.3" enable-background="new 0 0 312 362.3" xml:space="preserve">
+<polygon fill="#3B3B3B" points="156,0 207.5,30 51.5,120.3 0,90.5 "/>
+<polygon fill="#3B3B3B" points="172.5,70 224.3,40 312,91.3 259.8,120.3 "/>
+<polygon fill="#2E2E2E" points="0,90.5 0,271.8 156,362.3 156,302.5 51.8,241.8 51.5,120.3 "/>
+<polygon fill="#333333" points="312,271 156,362.3 156,302.5 260,242 259.8,120.3 312,91.3 "/>
+<polygon fill="#89C236" points="259.8,120.3 156,178.8 156,210 196.5,186.8 196.5,279 222.7,263.7 222.7,171.3 259.8,149.5 "/>
+<g>
+	<g>
+		<path fill="#78AB2F" d="M51.5,120.3l0.3,121.5l28.8,17v-37.5l43.6,25v37.6l31.9,18.6V178.8L51.5,120.3z M124,220.5l-43-24.8v-28.3
+			l43,24V220.5z"/>
+	</g>
+</g>
+</svg>

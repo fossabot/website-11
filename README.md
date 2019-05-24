@@ -1,4 +1,6 @@
 # website
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fwebsite.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fwebsite?ref=badge_shield)
+
 
 Repository for atlauncher.com website
 
@@ -40,3 +42,7 @@ To build the static assets, simply run `npm run build`.
 
 To deploy, simple run `npm run deploy:dev` to deploy to the dev stage and `npm run dev:prod` to
 deploy to the production stage.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fwebsite.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fwebsite?ref=badge_large)
